@@ -369,7 +369,8 @@ class SlackController:
             user_data = self._get_user_data(file_share_event['user'])
 
             full_data = {'channel': channel_data,
-                         'file_share': {'file': file_share_event['files'][0]},
+                         'file_share': {'file': file_share_event['files'][0],
+                                        'ts': file_share_event['ts']},
                          'user': user_data,
                          }
         else:
