@@ -202,11 +202,12 @@ class SlackController:
             try:
                 if (event['type'] == 'message' and
                         event.get('subtype', None) not in ['message_changed', 'message_deleted',
-                                                           'file_share', 'message_replied']):
+                                                           'file_share', 'message_replied'] and
+                        event.get('files', None) is None):
                     self.handle_message_event(event)
                 elif event['type'] in ['reaction_added']:
                     self.handle_reaction_event(event)
-                elif event.get('subtype') == 'file_share':
+                elif event.get('files', None):
                     self.handle_file_share_event(event)
                 else:
                     # Can handle other things like reactions and such
@@ -368,7 +369,7 @@ class SlackController:
             user_data = self._get_user_data(file_share_event['user'])
 
             full_data = {'channel': channel_data,
-                         'file_share': file_share_event,
+                         'file_share': {'file': file_share_event['files'][0]},
                          'user': user_data,
                          }
         else:
